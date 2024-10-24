@@ -6,7 +6,7 @@ export const useCopyToClipboard = () => {
     compose: false,
   });
 
-  const copyToClipboard = (content, type) => {
+  const copyToClipboard = (content, type) => { 
     navigator.clipboard.writeText(content);
     setCopySuccess((prev) => ({ ...prev, [type]: true }));
     setTimeout(
