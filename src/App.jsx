@@ -275,9 +275,9 @@ const App = () => {
               pipeops.io
             </a>
           </div>
-          {/* <div className="mt-2">
+          <div className="mt-2">
             Powered by {aiModel === 'Claude' ? 'Anthropic' : 'OpenAI'}
-          </div> */}
+          </div>
         </footer>
       </div>
     </div>
