@@ -70,7 +70,7 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-blue-300">AI-Powered Dockerfile Generator</h1>
+          <h1 className="text-4xl font-extrabold text-blue-300">Dockerfile Generator</h1>
           <p className="mt-2 text-xl text-gray-400">Create optimized Dockerfiles for your projects</p>
         </header>
 
