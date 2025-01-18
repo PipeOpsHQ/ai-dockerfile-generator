@@ -5,7 +5,6 @@ import ServiceCard from './components/service-card';
 import { useCopyToClipboard } from './common/copy';
 import { useDockerfileGenerator } from './common/generators';
 import StyledCheckbox from './components/styled-checkbox';
-import { Helmet } from 'react-helmet-async';
 
 const languages = [
   'Python', 'JavaScript', 'Java', 'C#', 'PHP', 'Go', 'Ruby', 'TypeScript', 
@@ -69,17 +68,6 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <Helmet>
-        <title>Dockerfile Generator</title>
-        <meta name="description" content="Create optimized Dockerfiles for your projects" />
-        <meta name="keywords" content="Dockerfile, Generator, Docker, DevOps, Programming" />
-        <meta name="author" content="pipeops.io" />
-        <meta property="og:title" content="Dockerfile Generator" />
-        <meta property="og:description" content="Create optimized Dockerfiles for your projects" />
-        <meta property="og:url" content="https://pipeops.io" />
-        <meta property="og:type" content="website" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-      </Helmet>
       <div className="max-w-3xl mx-auto">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-blue-300">Dockerfile Generator</h1>
