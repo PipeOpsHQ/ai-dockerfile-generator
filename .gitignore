@@ -25,6 +25,3 @@ dist-ssr
 bun.lockb
 yarn.lock
 package-lock.json
-npm-debug.log
-yarn-error.log
-pnpm-lock.yaml
