@@ -25,7 +25,9 @@ const StyledCheckbox = ({ label, checked, onChange, description }) => {
       <div className="flex-1">
         <div className="text-sm font-medium text-gray-200">{label}</div>
         {description && (
-          <div className="mt-1 text-xs text-gray-400">{description}</div>
+          <div className="mt-1 text-xs text-gray-400 transition-all duration-200 group-hover:text-gray-300">
+            {description}
+          </div>
         )}
       </div>
     </label>
