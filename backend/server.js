@@ -11,18 +11,20 @@ const app = express();
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 50,
+  windowMs: 2 * 60 * 1000,
+  max: 2,
 });
 
 // Middleware
 app.use(
   cors({
-    origin: dotenv.FRONTEND_URL || "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
   })
 );
 app.use(express.json());
 app.use(limiter);
+
+// Define routes after middleware
 
 // Configure API clients
 const anthropicClient = axios.create({
