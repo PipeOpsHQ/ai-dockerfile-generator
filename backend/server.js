@@ -16,13 +16,32 @@ const limiter = rateLimit({
 });
 
 // Middleware
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  })
-);
+// app.use(
+//   cors({
+//     origin: process.env.FRONTEND_URL || "http://localhost:5173",
+//     methods: ["GET", "POST"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//     credentials: true,
+//   })
+// );
+var allowlist = process.env.FRONTEND_URL || "http://localhost:5173";
+var corsOptionsDelegate = function (req, callback) {
+  var corsOptions;
+  if (req.header("Origin") === allowlist) {
+    console.log("CORS allowed");
+    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+  } else {
+    console.log("CORS is not allowed");
+    corsOptions = { origin: false }; // disable CORS for this request
+    callback(new Error("Not allowed by CORS"), corsOptions); // abort request with custom error
+  }
+};
+app.options("*", cors(corsOptionsDelegate)); // Handle preflight requests
 app.use(express.json());
+app.use(cors(corsOptionsDelegate));
 app.use(limiter);
+
+// Routes go here
 
 // Define routes after middleware
 
