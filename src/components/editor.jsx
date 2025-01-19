@@ -4,17 +4,17 @@ import { useCopyToClipboard } from "../common/copy";
 import PropTypes from 'prop-types';
 
 const EditorPanel = ({ content, refProp, filename }) => {
-    
-const {copySuccess, copyToClipboard} = useCopyToClipboard();
+  
+  const { copySuccess, copyToClipboard } = useCopyToClipboard();
 
-    return (
+  return (
     <div className="space-y-4">
       <div className="bg-gray-900 rounded-lg overflow-hidden shadow-inner">
         <textarea
           ref={refProp}
           value={content}
           readOnly
-          className="w-full h-64 p-4 text-sm text-green-400 bg-transparent border-0 focus:ring-0 resize-none font-mono"
+          className="w-full h-64 p-4 text-sm text-green-400 bg-transparent border-0 focus:ring-0 resize-none font-mono overflow-y-auto max-h-64"
           spellCheck="false"
         />
       </div>
@@ -48,9 +48,9 @@ const {copySuccess, copyToClipboard} = useCopyToClipboard();
 }
 
 EditorPanel.propTypes = {
-  content: PropTypes.string.isRequired,  // Add prop validation
-  refProp: PropTypes.string.isRequired,  // Add prop validation
-  filename: PropTypes.string.isRequired,  // Add prop validation
+  content: PropTypes.string.isRequired,
+  refProp: PropTypes.string.isRequired,
+  filename: PropTypes.string.isRequired,
 };
 
-  export default EditorPanel
+export default EditorPanel;

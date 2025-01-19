@@ -15,9 +15,11 @@ export const useDockerfileGenerator = () => {
   const [error, setError] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
   const [generateCompose, setGenerateCompose] = useState(false);
+  const [context, setContext] = useState(false);
+  const [contextValue, setContextValue] = useState("");
   const [language, setLanguage] = useState("");
   const [framework, setFramework] = useState("");
-  const [aiModel, setAiModel] = useState("chatgpt");
+  const [aiModel, setAiModel] = useState("");
 
   const getServicePort = (serviceValue) => {
     const service = serviceValue;
@@ -157,6 +159,8 @@ export const useDockerfileGenerator = () => {
     language,
     framework,
     aiModel,
+    context,
+    contextValue,
 
     // Setters
     setSelectedServices,
@@ -167,6 +171,8 @@ export const useDockerfileGenerator = () => {
     setDockerCompose,
     setError,
     setAiModel,
+    setContext,
+    setContextValue,
 
     // Actions
     generateDockerConfiguration,

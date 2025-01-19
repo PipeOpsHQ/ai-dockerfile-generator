@@ -27,6 +27,11 @@ body {
 }
 
 /* Scrollbar styles */
+textarea {
+  max-height: 8rem; /* Fixed height for textarea */
+  overflow-y: auto; /* Enable scrolling for overflow content */
+}
+
 textarea::-webkit-scrollbar {
   width: 8px;
 }
