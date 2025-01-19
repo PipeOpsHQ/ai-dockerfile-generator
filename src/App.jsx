@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { AlertCircle, Check, Copy, Download, Loader2, RefreshCw } from 'lucide-react';
 import downloadFile from './common/download';
 import AIModelLogo from './components/aimodel';
@@ -31,7 +32,7 @@ const frameworks = {
 
 const App = () => {
   const {copySuccess, copyToClipboard} = useCopyToClipboard();
-    const {
+  const {
     generateDockerConfiguration,
     generateCompose,
     setGenerateCompose,
@@ -48,6 +49,10 @@ const App = () => {
     aiModel, setAiModel,
   } = useDockerfileGenerator();
 
+  useEffect(() => {
+    setAiModel('GPT');
+  }, [setAiModel]);
+
   const handleServiceToggle = (service) => {
     setSelectedServices(prev =>
       prev.includes(service)
@@ -63,6 +68,7 @@ const App = () => {
     setDockerCompose('');
     setSelectedServices([]);
     setGenerateCompose(false);
+    setAiModel("GPT");
     setError('');
   };
 
@@ -122,7 +128,7 @@ const App = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">AI Model</label>
                 <div className="grid grid-cols-2 gap-4">
-                  {['Claude', 'GPT'].map((model) => (
+                  {['GPT', 'Claude'].map((model) => (
                     <button
                       key={model}
                       onClick={() => setAiModel(model)}
