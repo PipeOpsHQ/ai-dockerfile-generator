@@ -11,16 +11,28 @@ const app = express();
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 50,
+  windowMs: 2 * 60 * 1000,
+  max: 2,
 });
 
-// Middleware
-app.use(
-  cors({
-    origin: dotenv.FRONTEND_URL || "http://localhost:5173",
-  })
-);
+const allowlist = process.env.FRONTEND_URL || "http://localhost:5173";
+const corsOptionsDelegate = function (req, callback) {
+  const origin = req.header("Origin");
+  const url = req.url;
+  let corsOptions;
+  if (origin === allowlist || url === "/") {
+    console.log("CORS allowed for:", origin);
+    corsOptions = { origin: true, methods: ["GET", "POST"] }; // Enable CORS
+    callback(null, corsOptions); // Proceed with the request
+  } else {
+    console.log("CORS not allowed for:", origin);
+    corsOptions = { origin: false }; // Disable CORS for disallowed origins
+    callback(new Error("Not allowed by CORS"), corsOptions); // abort request with custom error
+  }
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(limiter);
 
@@ -101,6 +113,7 @@ app.post("/api/generate/claude", async (req, res) => {
 
 // Generate response using GPT
 app.post("/api/generate/gpt", async (req, res) => {
+  console.log("GPT API called");
   try {
     const { prompt, ...params } = req.body;
     const validatedParams = validateParams(params);
@@ -159,7 +172,7 @@ app.get("/api/models", (req, res) => {
 });
 
 // Health check endpoint
-app.get("/", (req, res) => {
+app.get("/", cors(), (req, res) => {
   res.json({
     status: "ok",
     message: "Prompt Runner is up and running!",
