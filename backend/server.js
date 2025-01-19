@@ -15,7 +15,10 @@ const limiter = rateLimit({
   max: 2,
 });
 
-const allowlist = process.env.FRONTEND_URL || "http://localhost:5173";
+const allowlist = process.env.NODE_ENV === "production" 
+    ? process.env.FRONTEND_URL 
+    : "http://localhost:5173";
+
 const corsOptionsDelegate = function (req, callback) {
   const origin = req.header("Origin");
   const url = req.url;
