@@ -55,6 +55,7 @@ export const useDockerfileGenerator = () => {
         - Set up the proper CMD or ENTRYPOINT
         - Minimize the image size
         - Ensure the Dockerfile is suitable for a production environment
+        ${contextValue ? `Additional context: ${contextValue}` : ""}
         Please provide only the Dockerfile content without any explanations.`;
 
       let dockerfileResult;
@@ -106,7 +107,7 @@ export const useDockerfileGenerator = () => {
       - Ensure all configurations adhere to Docker Compose best practices.
       - Use secure and minimal settings for production readiness.
       - Include fallback options or defaults for common services, such as databases or caching layers.
-      
+      ${contextValue ? `Additional context: ${contextValue}` : ""}
       Please provide only the docker-compose.yml content without any explanations.`;
 
         let composeResult;
