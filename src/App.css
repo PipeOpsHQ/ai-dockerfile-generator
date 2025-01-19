@@ -27,11 +27,6 @@ body {
 }
 
 /* Scrollbar styles */
-textarea {
-  max-height: 8rem; /* Fixed height for textarea */
-  overflow-y: auto; /* Enable scrolling for overflow content */
-}
-
 textarea::-webkit-scrollbar {
   width: 8px;
 }
@@ -56,7 +51,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 /* Animations */
 .bg-gradient-to-br {
   background-size: 200% 200%;
-  animation: gradient 15s ease infinite;
+  animation: gradient 10s ease infinite;
   width: 100%;
   height: 100%;
 }
@@ -64,7 +59,7 @@ textarea::-webkit-scrollbar-thumb:hover {
 @media (min-width: 2560px) {
   .bg-gradient-to-br {
     background-size: 150% 150%;
-    animation: gradient 20s ease infinite;
+    animation: gradient 15s ease infinite;
   }
 }
 
