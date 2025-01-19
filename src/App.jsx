@@ -209,6 +209,7 @@ const App = () => {
                         className="w-full p-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-blue-500"
                         placeholder="(e.g., custom packages, environment variables, build arguments, etc.)"
                         rows="3"
+                        style={{ maxHeight: '500px' }}
                       />
                     </div>
                   )}
@@ -250,10 +251,14 @@ const App = () => {
 
             {dockerfile && (
               <div className="mt-8 space-y-6">
+                {/* Dockerfile Section */}
                 <div>
                   <h3 className="text-lg font-medium text-blue-300 mb-4">Dockerfile</h3>
                   <div className="relative">
-                    <pre className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-x-auto">
+                    <pre
+                      className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-y-auto"
+                      style={{ maxHeight: '500px' }}
+                    >
                       {dockerfile}
                     </pre>
                     <div className="absolute top-2 right-2 flex space-x-2">
@@ -279,11 +284,15 @@ const App = () => {
                   </div>
                 </div>
 
+                {/* docker-compose.yaml Section */}
                 {generateCompose && dockerCompose && (
                   <div>
                     <h3 className="text-lg font-medium text-blue-300 mb-4">docker-compose.yaml</h3>
                     <div className="relative">
-                      <pre className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-x-auto">
+                      <pre
+                        className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-y-auto"
+                        style={{ maxHeight: '500px' }}
+                      >
                         {dockerCompose}
                       </pre>
                       <div className="absolute top-2 right-2 flex space-x-2">
