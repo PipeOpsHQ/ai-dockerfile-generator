@@ -1,14 +1,17 @@
+import { useEffect } from 'react';
 import { AlertCircle, Check, Copy, Download, Loader2, RefreshCw } from 'lucide-react';
 import downloadFile from './common/download';
 import AIModelLogo from './components/aimodel';
 import ServiceCard from './components/service-card';
 import { useCopyToClipboard } from './common/copy';
 import { useDockerfileGenerator } from './common/generators';
-import StyledCheckbox from './components/styled-checkbox';
+// import StyledCheckbox from './components/styled-checkbox';
+import CompactToggle from './components/compact-toggle';
 
 const languages = [
   'Python', 'JavaScript', 'Java', 'C#', 'PHP', 'Go', 'Ruby', 'TypeScript', 
-  'Swift', 'Kotlin', 'Rust', 'Scala', 'Dart', 'Elixir', 'Haskell'
+  'Swift', 'Kotlin', 'Rust', 'Scala', 'Dart', 'Elixir', 'Haskell', 'C++', 
+  'Perl', 'R', 'Objective-C', 'Shell', 'Lua', 'Clojure', 'F#', 'Erlang'
 ];
 
 const frameworks = {
@@ -26,12 +29,21 @@ const frameworks = {
   Scala: ['Play Framework', 'Akka', 'Lift', 'Scalatra'],
   Dart: ['Flutter', 'AngularDart', 'Aqueduct'],
   Elixir: ['Phoenix', 'Nerves', 'Absinthe'],
-  Haskell: ['Yesod', 'Snap', 'Servant', 'Scotty']
+  Haskell: ['Yesod', 'Snap', 'Servant', 'Scotty'],
+  'C++': ['Qt', 'Boost', 'Poco', 'Cinder', 'JUCE'],
+  Perl: ['Catalyst', 'Dancer', 'Mojolicious'],
+  R: ['Shiny', 'Plumber'],
+  'Objective-C': ['Cocoa', 'Cocoa Touch'],
+  Shell: ['Bash', 'Zsh', 'Fish'],
+  Lua: ['LÖVE', 'OpenResty', 'Lapis'],
+  Clojure: ['Ring', 'Compojure', 'Luminus'],
+  'F#': ['Giraffe', 'Saturn'],
+  Erlang: ['Cowboy', 'Chicago Boss', 'N2O']
 };
 
 const App = () => {
   const {copySuccess, copyToClipboard} = useCopyToClipboard();
-    const {
+  const {
     generateDockerConfiguration,
     generateCompose,
     setGenerateCompose,
@@ -46,7 +58,13 @@ const App = () => {
     framework, setFramework,
     error, setError,
     aiModel, setAiModel,
+    context, setContext,
+    contextValue, setContextValue 
   } = useDockerfileGenerator();
+
+  useEffect(() => {
+    setAiModel('GPT');
+  }, [setAiModel]);
 
   const handleServiceToggle = (service) => {
     setSelectedServices(prev =>
@@ -63,6 +81,7 @@ const App = () => {
     setDockerCompose('');
     setSelectedServices([]);
     setGenerateCompose(false);
+    setAiModel("GPT");
     setError('');
   };
 
@@ -122,7 +141,7 @@ const App = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">AI Model</label>
                 <div className="grid grid-cols-2 gap-4">
-                  {['Claude', 'GPT'].map((model) => (
+                  {['GPT', 'Claude'].map((model) => (
                     <button
                       key={model}
                       onClick={() => setAiModel(model)}
@@ -138,29 +157,64 @@ const App = () => {
                 </div>
               </div>
 
-            <StyledCheckbox
-              label="Add Docker Compose file"
-              description="Create a docker-compose.yml file with your selected services"
-              checked={generateCompose}
-              onChange={(e) => setGenerateCompose(e.target.checked)}
-            />
-
-            {/* Services Selection */}
-              {generateCompose && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-4">Additional Services</label>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {services.map((service) => (
-                      <ServiceCard
-                        key={service.value}
-                        service={service}
-                        selected={selectedServices.includes(service.value)}
-                        onToggle={handleServiceToggle}
-                      />
-                    ))}
+              <div className="space-y-6">
+                {/* Add Docker Compose Section */}
+                <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Add Docker Compose File
+                    </label>
+                    <CompactToggle
+                      checked={generateCompose}
+                      onToggle={setGenerateCompose}
+                    />
                   </div>
+
+                  {generateCompose && (
+                    <div className="mt-4">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Additional Services
+                      </label>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {services.map((service) => (
+                          <ServiceCard
+                            key={service.value}
+                            service={service}
+                            selected={selectedServices.includes(service.value)}
+                            onToggle={handleServiceToggle}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              )}
+
+                {/* Context Section */}
+                <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                  <div className="flex items-center justify-between">
+                    <label className="block text-sm font-medium text-gray-300">
+                      Add Context for Your Dockerfile
+                    </label>
+                    <CompactToggle
+                      checked={context}
+                      onToggle={setContext}
+                    />
+                  </div>
+
+                  {context && (
+                    <div className="mt-4">
+                      <textarea
+                        value={contextValue}
+                        onChange={(e) => setContextValue(e.target.value)}
+                        className="w-full p-2 bg-gray-700 text-gray-200 rounded-lg focus:ring-blue-500"
+                        placeholder="(e.g., custom packages, environment variables, build arguments, etc.)"
+                        rows="3"
+                        style={{ maxHeight: '500px' }}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
 
               <div className="flex space-x-4">
                 <button
@@ -197,10 +251,14 @@ const App = () => {
 
             {dockerfile && (
               <div className="mt-8 space-y-6">
+                {/* Dockerfile Section */}
                 <div>
                   <h3 className="text-lg font-medium text-blue-300 mb-4">Dockerfile</h3>
                   <div className="relative">
-                     <pre className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-x-auto">
+                    <pre
+                      className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-y-auto"
+                      style={{ maxHeight: '500px' }}
+                    >
                       {dockerfile}
                     </pre>
                     <div className="absolute top-2 right-2 flex space-x-2">
@@ -226,11 +284,15 @@ const App = () => {
                   </div>
                 </div>
 
+                {/* docker-compose.yaml Section */}
                 {generateCompose && dockerCompose && (
                   <div>
                     <h3 className="text-lg font-medium text-blue-300 mb-4">docker-compose.yaml</h3>
                     <div className="relative">
-                      <pre className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-x-auto">
+                      <pre
+                        className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-y-auto"
+                        style={{ maxHeight: '500px' }}
+                      >
                         {dockerCompose}
                       </pre>
                       <div className="absolute top-2 right-2 flex space-x-2">

@@ -1,5 +1,10 @@
 import { useState } from "react";
 import services from "./services";
+import { generateWithClaude, generateWithGPT } from "../store/ai";
+import {
+  fetchSystemPrompt,
+  fetchSystemPromptForDockerCompose,
+} from "../store/prompt";
 // import { useCopyToClipboard } from "./copy";
 
 export const useDockerfileGenerator = () => {
@@ -10,16 +15,26 @@ export const useDockerfileGenerator = () => {
   const [error, setError] = useState("");
   const [selectedServices, setSelectedServices] = useState([]);
   const [generateCompose, setGenerateCompose] = useState(false);
+  const [context, setContext] = useState(false);
+  const [contextValue, setContextValue] = useState("");
   const [language, setLanguage] = useState("");
   const [framework, setFramework] = useState("");
-  const [aiModel, setAiModel] = useState("Claude");
+  const [aiModel, setAiModel] = useState("");
 
   const getServicePort = (serviceValue) => {
     const service = serviceValue;
     return service ? service.port : "8000";
   };
 
+  const resetForm = () => {
+    setDockerfile("");
+    setDockerCompose("");
+    setError("");
+  };
+
   const generateDockerConfiguration = async () => {
+    resetForm();
+
     if (!language || !framework) {
       setError("Please select both a language and framework.");
       return;
@@ -29,62 +44,110 @@ export const useDockerfileGenerator = () => {
     setError("");
 
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
       // Generate Dockerfile
-      const appPort = language.toLowerCase() === "python" ? "8000" : "3000";
-      const generatedDockerfile = `FROM ${language.toLowerCase()}:latest
-WORKDIR /app
-COPY . .
-RUN ${
-        language.toLowerCase() === "python"
-          ? "pip install -r requirements.txt"
-          : "npm install"
-      }
-EXPOSE ${appPort}
-CMD ${
-        language.toLowerCase() === "python"
-          ? '["python", "app.py"]'
-          : '["npm", "start"]'
-      }`;
+      const dockerfilePrompt = `Create a production-ready Dockerfile for a ${language} application using the ${framework} framework. 
+        Requirements:
+        - Use the official ${language} base image
+        - Follow best practices for security and optimization
+        - Handle dependency installation
+        - Set up the proper working directory
+        - Configure appropriate ports
+        - Set up the proper CMD or ENTRYPOINT
+        - Minimize the image size
+        - Ensure the Dockerfile is suitable for a production environment
 
-      setDockerfile(generatedDockerfile);
+        ${context ? `Additional Context: ${contextValue}` : ""}
+        
+        Please provide only the Dockerfile content without any explanations.`;
+
+      let dockerfileResult;
+      if (aiModel.includes("GPT")) {
+        dockerfileResult = await generateWithGPT(dockerfilePrompt, {
+          // model: "gpt-3.5-turbo-0125",
+          model: "gpt-4-turbo",
+          temperature: 0.3,
+          maxTokens: 2048,
+          systemPrompt: await fetchSystemPrompt().catch((error) => {
+            console.error("Error:", error);
+            throw error;
+          }),
+          stream: false,
+        });
+      } else {
+        dockerfileResult = await generateWithClaude(dockerfilePrompt, {
+          model: "claude-3-opus-20240229",
+          temperature: 0.3,
+          maxTokens: 2048,
+          systemPrompt: fetchSystemPrompt()
+            .then((content) => content)
+            .catch((error) => console.error("Error:", error)),
+          stream: false,
+        });
+      }
+
+      setDockerfile(dockerfileResult.content);
 
       // Generate Docker Compose if enabled
       if (generateCompose && selectedServices.length > 0) {
-        const composeServices = selectedServices.reduce((acc, serviceValue) => {
-          acc[serviceValue] = {
-            image: `${serviceValue}:latest`,
-            ports: [
-              `${getServicePort(serviceValue)}:${getServicePort(serviceValue)}`,
-            ],
-          };
-          return acc;
-        }, {});
+        const composePrompt = `Create a docker-compose.yml file for a ${language} ${framework} application with the following services: ${selectedServices.join(
+          ", "
+        )}.
+      Requirements:
+      - Version 3.8 syntax
+      - Include the main application service
+      - Configure appropriate ports for each service
+      - Set up proper service dependencies
+      - Include network configuration if needed
+      - Add appropriate environment variables
+      
+      - Configure the following for each service:
+      - Expose necessary ports.
+      - Define service-specific dependencies (depends_on) to ensure correct startup order.
+      - Attach services to appropriate networks (e.g., shared or custom networks).  
+      
+      ### Additional Considerations:
+      - Ensure all configurations adhere to Docker Compose best practices.
+      - Use secure and minimal settings for production readiness.
+      - Include fallback options or defaults for common services, such as databases or caching layers.
 
-        const generatedCompose = `version: '3.8'
-services:
-  app:
-    build: .
-    ports:
-      - "${appPort}:${appPort}"
-    depends_on:
-      ${selectedServices.map((s) => `- ${s}`).join("\n      ")}
-${Object.entries(composeServices)
-  .map(
-    ([name, config]) => `
-  ${name}:
-    image: ${config.image}
-    ports:
-      - "${config.ports[0]}"`
-  )
-  .join("")}`;
+      ${context ? `Additional Context: ${contextValue}` : ""}
 
-        setDockerCompose(generatedCompose);
+      Please provide only the docker-compose.yml content without any explanations.`;
+
+        let composeResult;
+        if (aiModel.includes("GPT")) {
+          composeResult = await generateWithGPT(composePrompt, {
+            // model: "gpt-3.5-turbo-0125",
+            model: "gpt-4-turbo",
+            systemPrompt: await fetchSystemPromptForDockerCompose()
+              .catch((error) => {
+                console.error("Error:", error);
+                throw error;
+              })
+              .then((content) => content)
+              .catch((error) => console.error("Error:", error)),
+            stream: false,
+          });
+        } else {
+          composeResult = await generateWithClaude(composePrompt, {
+            model: "claude-3-opus-20240229",
+            temperature: 0.3,
+            maxTokens: 2048,
+            systemPrompt: fetchSystemPromptForDockerCompose()
+              .then((content) => content)
+              .catch((error) => console.error("Error:", error)),
+            stream: false,
+          });
+        }
+
+        setDockerCompose(composeResult.content);
       }
     } catch (err) {
-      setError("Failed to generate Dockerfile. Please try again.");
+      setError(
+        err.message ||
+          "Failed to generate Docker configuration. Please try again."
+      );
+      console.error("Generation error:", err);
     } finally {
       setIsLoading(false);
     }
@@ -101,6 +164,8 @@ ${Object.entries(composeServices)
     language,
     framework,
     aiModel,
+    context,
+    contextValue,
 
     // Setters
     setSelectedServices,
@@ -111,9 +176,12 @@ ${Object.entries(composeServices)
     setDockerCompose,
     setError,
     setAiModel,
+    setContext,
+    setContextValue,
 
     // Actions
     generateDockerConfiguration,
+    getServicePort,
 
     // Constants
     services: services,
