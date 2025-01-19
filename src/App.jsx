@@ -193,7 +193,7 @@ const App = () => {
                 <div className="bg-gray-800 p-4 rounded-lg shadow-md">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-gray-300">
-                      Add More Context for Your Dockerfile
+                      Add Context for Your Dockerfile
                     </label>
                     <CompactToggle
                       checked={context}
