@@ -15,30 +15,25 @@ const limiter = rateLimit({
   max: 2,
 });
 
-// Middleware
-// app.use(
-//   cors({
-//     origin: process.env.FRONTEND_URL || "http://localhost:5173",
-//     methods: ["GET", "POST"],
-//     allowedHeaders: ["Content-Type", "Authorization"],
-//     credentials: true,
-//   })
-// );
-var allowlist = process.env.FRONTEND_URL || "http://localhost:5173";
-var corsOptionsDelegate = function (req, callback) {
-  var corsOptions;
-  if (req.header("Origin") === allowlist) {
-    console.log("CORS allowed");
-    corsOptions = { origin: true }; // reflect (enable) the requested origin in the CORS response
+const allowlist = process.env.FRONTEND_URL || "http://localhost:5173";
+const corsOptionsDelegate = function (req, callback) {
+  const origin = req.header("Origin");
+  const url = req.url;
+  let corsOptions;
+  if (origin === allowlist || url === "/") {
+    console.log("CORS allowed for:", origin);
+    corsOptions = { origin: true, methods: ["GET", "POST"] }; // Enable CORS
+    callback(null, corsOptions); // Proceed with the request
   } else {
-    console.log("CORS is not allowed");
-    corsOptions = { origin: false }; // disable CORS for this request
+    console.log("CORS not allowed for:", origin);
+    corsOptions = { origin: false }; // Disable CORS for disallowed origins
     callback(new Error("Not allowed by CORS"), corsOptions); // abort request with custom error
   }
 };
-app.options("*", cors(corsOptionsDelegate)); // Handle preflight requests
-app.use(express.json());
+
+// Apply CORS middleware
 app.use(cors(corsOptionsDelegate));
+app.use(express.json());
 app.use(limiter);
 
 // Routes go here
@@ -122,6 +117,7 @@ app.post("/api/generate/claude", async (req, res) => {
 
 // Generate response using GPT
 app.post("/api/generate/gpt", async (req, res) => {
+  console.log("GPT API called");
   try {
     const { prompt, ...params } = req.body;
     const validatedParams = validateParams(params);
@@ -180,7 +176,7 @@ app.get("/api/models", (req, res) => {
 });
 
 // Health check endpoint
-app.get("/", (req, res) => {
+app.get("/", cors(), (req, res) => {
   res.json({
     status: "ok",
     message: "Prompt Runner is up and running!",
