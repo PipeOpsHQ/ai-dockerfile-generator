@@ -11,12 +11,13 @@ const app = express();
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: 2 * 60 * 1000,
-  max: 2,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // limit each IP to 100 requests per windowMs
 });
 
-const allowlist = process.env.NODE_ENV === "production" 
-    ? process.env.FRONTEND_URL 
+const allowlist =
+  process.env.NODE_ENV === "production"
+    ? process.env.FRONTEND_URL
     : "http://localhost:5173";
 
 const corsOptionsDelegate = function (req, callback) {
