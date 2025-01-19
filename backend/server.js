@@ -36,10 +36,6 @@ app.use(cors(corsOptionsDelegate));
 app.use(express.json());
 app.use(limiter);
 
-// Routes go here
-
-// Define routes after middleware
-
 // Configure API clients
 const anthropicClient = axios.create({
   baseURL: "https://api.anthropic.com/v1",
