@@ -111,54 +111,58 @@ const App = () => {
                       setFramework('');
                     }}
                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg text-gray-200"
-                  >
+                    >
                     <option value="">Select a language</option>
                     {languages.map(lang => (
                       <option key={lang} value={lang}>{lang}</option>
                     ))}
-                  </select>
-                </div>
+                    </select>
+                  </div>
 
-                <div>
-                  <label htmlFor="framework" className="block text-sm font-medium text-gray-300 mb-1">
+                  <div>
+                    <label htmlFor="framework" className="block text-sm font-medium text-gray-300 mb-1">
                     Framework
-                  </label>
-                  <select
+                    </label>
+                    <select
                     id="framework"
                     value={framework}
                     onChange={(e) => setFramework(e.target.value)}
                     disabled={!language}
                     className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-600 bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-lg text-gray-200 disabled:opacity-50"
-                  >
+                    >
                     <option value="">Select a framework</option>
                     {language && frameworks[language]?.map(fw => (
                       <option key={fw} value={fw}>{fw}</option>
                     ))}
-                  </select>
-                </div>
-              </div>
+                    </select>
+                  </div>
+                  </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">AI Model</label>
-                <div className="grid grid-cols-2 gap-4">
-                  {['GPT', 'Claude'].map((model) => (
+                  <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">AI Model</label>
+                  <div className="grid grid-cols-2 gap-4">
+                    {['GPT', 'Claude'].map((model) => (
                     <button
                       key={model}
                       onClick={() => setAiModel(model)}
                       className={`flex items-center justify-center p-4 rounded-lg border-2 transition-all ${
-                        aiModel === model
-                          ? 'border-blue-500 bg-blue-500/20'
-                          : 'border-gray-600 hover:border-blue-400'
+                      aiModel === model
+                        ? 'border-blue-500 bg-blue-500/20'
+                        : 'border-gray-600 hover:border-blue-400'
                       }`}
+                      disabled={model === 'Claude'}
                     >
                       <AIModelLogo model={model} />
+                      {model === 'Claude' && (
+                      <span className="ml-2 text-xs text-yellow-400">Coming Soon</span>
+                      )}
                     </button>
-                  ))}
-                </div>
-              </div>
+                    ))}
+                  </div>
+                  </div>
 
-              <div className="space-y-6">
-                {/* Add Docker Compose Section */}
+                  <div className="space-y-6">
+                  {/* Add Docker Compose Section */}
                 <div className="bg-gray-800 p-4 rounded-lg shadow-md">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-gray-300">
