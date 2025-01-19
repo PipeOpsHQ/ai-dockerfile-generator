@@ -24,7 +24,15 @@ export const useDockerfileGenerator = () => {
     return service ? service.port : "8000";
   };
 
+  const resetForm = () => {
+    setDockerfile("");
+    setDockerCompose("");
+    setError("");
+  };
+
   const generateDockerConfiguration = async () => {
+    resetForm();
+
     if (!language || !framework) {
       setError("Please select both a language and framework.");
       return;
@@ -35,25 +43,29 @@ export const useDockerfileGenerator = () => {
 
     try {
       // Generate Dockerfile
-      const dockerfilePrompt = `Create a production-ready Dockerfile for a ${language} application using ${framework} framework. 
-    Requirements:
-    - Use official ${language} base image
-    - Include best practices for security and optimization
-    - Handle dependency installation
-    - Set up proper working directory
-    - Configure appropriate ports
-    - Set up proper CMD or ENTRYPOINT
-    Please provide only the Dockerfile content without any explanations.`;
+      const dockerfilePrompt = `Create a production-ready Dockerfile for a ${language} application using the ${framework} framework. 
+        Requirements:
+        - Use the official ${language} base image
+        - Follow best practices for security and optimization
+        - Handle dependency installation
+        - Set up the proper working directory
+        - Configure appropriate ports
+        - Set up the proper CMD or ENTRYPOINT
+        - Minimize the image size
+        - Ensure the Dockerfile is suitable for a production environment
+        Please provide only the Dockerfile content without any explanations.`;
 
       let dockerfileResult;
-      if (aiModel.includes("chatgpt")) {
+      if (aiModel.includes("GPT")) {
         dockerfileResult = await generateWithGPT(dockerfilePrompt, {
-          model: "gpt-3.5-turbo",
+          // model: "gpt-3.5-turbo-0125",
+          model: "gpt-4-turbo",
           temperature: 0.3,
           maxTokens: 2048,
-          systemPrompt: fetchSystemPrompt()
-            .then((content) => content)
-            .catch((error) => console.error("Error:", error)),
+          systemPrompt: await fetchSystemPrompt().catch((error) => {
+            console.error("Error:", error);
+            throw error;
+          }),
           stream: false,
         });
       } else {
@@ -82,15 +94,29 @@ export const useDockerfileGenerator = () => {
       - Set up proper service dependencies
       - Include network configuration if needed
       - Add appropriate environment variables
+      
+      - Configure the following for each service:
+      - Expose necessary ports.
+      - Define service-specific dependencies (depends_on) to ensure correct startup order.
+      - Attach services to appropriate networks (e.g., shared or custom networks).  
+      
+      ### Additional Considerations:
+      - Ensure all configurations adhere to Docker Compose best practices.
+      - Use secure and minimal settings for production readiness.
+      - Include fallback options or defaults for common services, such as databases or caching layers.
+      
       Please provide only the docker-compose.yml content without any explanations.`;
 
         let composeResult;
-        if (aiModel.includes("chatgpt")) {
+        if (aiModel.includes("GPT")) {
           composeResult = await generateWithGPT(composePrompt, {
-            model: "gpt-3.5-turbo",
-            temperature: 0.3,
-            maxTokens: 2048,
-            systemPrompt: fetchSystemPromptForDockerCompose()
+            // model: "gpt-3.5-turbo-0125",
+            model: "gpt-4-turbo",
+            systemPrompt: await fetchSystemPromptForDockerCompose()
+              .catch((error) => {
+                console.error("Error:", error);
+                throw error;
+              })
               .then((content) => content)
               .catch((error) => console.error("Error:", error)),
             stream: false,

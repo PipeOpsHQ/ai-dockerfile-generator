@@ -9,7 +9,8 @@ import StyledCheckbox from './components/styled-checkbox';
 
 const languages = [
   'Python', 'JavaScript', 'Java', 'C#', 'PHP', 'Go', 'Ruby', 'TypeScript', 
-  'Swift', 'Kotlin', 'Rust', 'Scala', 'Dart', 'Elixir', 'Haskell'
+  'Swift', 'Kotlin', 'Rust', 'Scala', 'Dart', 'Elixir', 'Haskell', 'C++', 
+  'Perl', 'R', 'Objective-C', 'Shell', 'Lua', 'Clojure', 'F#', 'Erlang'
 ];
 
 const frameworks = {
@@ -27,7 +28,16 @@ const frameworks = {
   Scala: ['Play Framework', 'Akka', 'Lift', 'Scalatra'],
   Dart: ['Flutter', 'AngularDart', 'Aqueduct'],
   Elixir: ['Phoenix', 'Nerves', 'Absinthe'],
-  Haskell: ['Yesod', 'Snap', 'Servant', 'Scotty']
+  Haskell: ['Yesod', 'Snap', 'Servant', 'Scotty'],
+  'C++': ['Qt', 'Boost', 'Poco', 'Cinder', 'JUCE'],
+  Perl: ['Catalyst', 'Dancer', 'Mojolicious'],
+  R: ['Shiny', 'Plumber'],
+  'Objective-C': ['Cocoa', 'Cocoa Touch'],
+  Shell: ['Bash', 'Zsh', 'Fish'],
+  Lua: ['LÖVE', 'OpenResty', 'Lapis'],
+  Clojure: ['Ring', 'Compojure', 'Luminus'],
+  'F#': ['Giraffe', 'Saturn'],
+  Erlang: ['Cowboy', 'Chicago Boss', 'N2O']
 };
 
 const App = () => {

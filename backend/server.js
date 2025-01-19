@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -27,7 +28,7 @@ app.use(limiter);
 const anthropicClient = axios.create({
   baseURL: "https://api.anthropic.com/v1",
   headers: {
-    "x-api-key": dotenv.CLAUDE_API_KEY,
+    "x-api-key": process.env.CLAUDE_API_KEY,
     "anthropic-version": "2023-06-01",
   },
 });
@@ -35,7 +36,7 @@ const anthropicClient = axios.create({
 const openaiClient = axios.create({
   baseURL: "https://api.openai.com/v1",
   headers: {
-    Authorization: `Bearer ${dotenv.OPENAI_API_KEY}`,
+    Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
   },
 });
 
@@ -170,7 +171,7 @@ app.get("/", (req, res) => {
   });
 });
 
-const PORT = dotenv.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
