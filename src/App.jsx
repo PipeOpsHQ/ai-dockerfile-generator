@@ -86,21 +86,21 @@ const App = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <header className="text-center mb-12">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 text-gray-100 py-16 px-6 sm:px-8 lg:px-10">
+      <div className="max-w-4xl mx-auto">
+        <header className="text-center mb-16">
           <h1 className="text-4xl font-extrabold text-blue-300">Dockerfile Generator</h1>
-          <p className="mt-2 text-xl text-gray-400">Create optimized Dockerfiles for your projects</p>
+          <p className="mt-4 text-2xl text-gray-400">Create optimized Dockerfiles for your projects</p>
         </header>
 
         <main className="bg-gray-800 rounded-2xl shadow-2xl overflow-hidden">
-          <div className="p-8">
-            <h2 className="text-2xl font-bold text-blue-300 mb-6">Generate Your Custom Dockerfile</h2>
+          <div className="p-10">
+            <h2 className="text-3xl font-bold text-blue-300 mb-8">Generate Your Custom Dockerfile</h2>
             
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
-                  <label htmlFor="language" className="block text-sm font-medium text-gray-300 mb-1">
+                  <label htmlFor="language" className="block text-sm font-medium text-gray-300 mb-2">
                     Programming Language
                   </label>
                   <select
@@ -120,7 +120,7 @@ const App = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="framework" className="block text-sm font-medium text-gray-300 mb-1">
+                    <label htmlFor="framework" className="block text-sm font-medium text-gray-300 mb-2">
                     Framework
                     </label>
                     <select
@@ -161,9 +161,9 @@ const App = () => {
                   </div>
                   </div>
 
-                  <div className="space-y-6">
+                  <div className="space-y-8">
                   {/* Add Docker Compose Section */}
-                <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                <div className="bg-gray-800 p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-gray-300">
                       Add Docker Compose File
@@ -194,7 +194,7 @@ const App = () => {
                 </div>
 
                 {/* Context Section */}
-                <div className="bg-gray-800 p-4 rounded-lg shadow-md">
+                <div className="bg-gray-800 p-6 rounded-lg shadow-md">
                   <div className="flex items-center justify-between">
                     <label className="block text-sm font-medium text-gray-300">
                       Add Context for Your Dockerfile
@@ -254,7 +254,7 @@ const App = () => {
             )}
 
             {dockerfile && (
-              <div className="mt-8 space-y-6">
+              <div className="mt-8 space-y-8">
                 {/* Dockerfile Section */}
                 <div>
                   <h3 className="text-lg font-medium text-blue-300 mb-4">Dockerfile</h3>
