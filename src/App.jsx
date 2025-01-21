@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { AlertCircle, Check, Copy, Download, Loader2, RefreshCw } from 'lucide-react';
+import { AlertCircle, Loader2, RefreshCw } from 'lucide-react';
 import downloadFile from './common/download';
 import AIModelLogo from './components/aimodel';
 import ServiceCard from './components/service-card';
@@ -7,6 +7,7 @@ import { useCopyToClipboard } from './common/copy';
 import { useDockerfileGenerator } from './common/generators';
 // import StyledCheckbox from './components/styled-checkbox';
 import CompactToggle from './components/compact-toggle';
+import CodeEditor from './components/editor';
 
 const languages = [
   'Python', 'JavaScript', 'Java', 'C#', 'PHP', 'Go', 'Ruby', 'TypeScript', 
@@ -254,76 +255,15 @@ const App = () => {
             )}
 
             {dockerfile && (
-              <div className="mt-8 space-y-6">
-                {/* Dockerfile Section */}
-                <div>
-                  <h3 className="text-lg font-medium text-blue-300 mb-4">Dockerfile</h3>
-                  <div className="relative">
-                    <pre
-                      className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-y-auto"
-                      style={{ maxHeight: '500px' }}
-                    >
-                      {dockerfile}
-                    </pre>
-                    <div className="absolute top-2 right-2 flex space-x-2">
-                      <button
-                        onClick={() => copyToClipboard(dockerfile, 'dockerfile')}
-                        className="p-2 text-gray-400 hover:text-white rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors"
-                        title="Copy to clipboard"
-                      >
-                        {copySuccess.dockerfile ? (
-                          <Check className="h-5 w-5 text-green-500" />
-                        ) : (
-                          <Copy className="h-5 w-5" />
-                        )}
-                      </button>
-                      <button
-                        onClick={() => downloadFile(dockerfile, 'dockerfile')}
-                        className="p-2 text-gray-400 hover:text-white rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors"
-                        title="Download Dockerfile"
-                      >
-                        <Download className="h-5 w-5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* docker-compose.yaml Section */}
-                {generateCompose && dockerCompose && (
-                  <div>
-                    <h3 className="text-lg font-medium text-blue-300 mb-4">docker-compose.yaml</h3>
-                    <div className="relative">
-                      <pre
-                        className="bg-gray-900 rounded-lg p-4 text-sm text-green-400 font-mono overflow-y-auto"
-                        style={{ maxHeight: '500px' }}
-                      >
-                        {dockerCompose}
-                      </pre>
-                      <div className="absolute top-2 right-2 flex space-x-2">
-                        <button
-                          onClick={() => copyToClipboard(dockerCompose, 'compose')}
-                          className="p-2 text-gray-400 hover:text-white rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors"
-                          title="Copy to clipboard"
-                        >
-                          {copySuccess.compose ? (
-                            <Check className="h-5 w-5 text-green-500" />
-                          ) : (
-                            <Copy className="h-5 w-5" />
-                          )}
-                        </button>
-                        <button
-                          onClick={() => downloadFile(dockerCompose, 'compose')}
-                          className="p-2 text-gray-400 hover:text-white rounded-lg bg-gray-800/50 hover:bg-gray-700/50 transition-colors"
-                          title="Download docker-compose.yml"
-                        >
-                          <Download className="h-5 w-5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+              <CodeEditor
+                dockerfile={dockerfile}
+                dockerCompose={dockerCompose}
+                copyToClipboard={copyToClipboard}
+                downloadFile={downloadFile}
+                copySuccess={copySuccess}
+              />
             )}
+
           </div>
         </main>
 
