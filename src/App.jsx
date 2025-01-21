@@ -15,12 +15,12 @@ const languages = [
 ];
 
 const frameworks = {
-  Python: ['Django', 'Flask', 'FastAPI', 'Pyramid', 'Tornado', 'Bottle'],
-  JavaScript: ['Express.js', 'React', 'Angular', 'Vue.js', 'Next.js', 'Meteor'],
+  Python: ['Python', 'Django', 'Flask', 'FastAPI', 'Pyramid', 'Tornado', 'Bottle'],
+  JavaScript: ['Node.js', 'Express.js', 'React', 'Angular', 'Vue.js', 'Next.js', 'Meteor'],
   Java: ['Spring Boot', 'Hibernate', 'Struts', 'JavaServer Faces', 'Play Framework'],
   'C#': ['.NET Core', 'ASP.NET', 'Entity Framework', 'Xamarin', 'Unity'],
-  PHP: ['Laravel', 'Symfony', 'CodeIgniter', 'Yii', 'CakePHP', 'Zend Framework'],
-  Go: ['Gin', 'Echo', 'Beego', 'Buffalo', 'Revel', 'Fiber'],
+  PHP: ['PHP', 'Laravel', 'Symfony', 'CodeIgniter', 'Yii', 'CakePHP', 'Zend Framework'],
+  Go: ['Go', 'Gin', 'Echo', 'Beego', 'Buffalo', 'Revel', 'Fiber'],
   Ruby: ['Ruby on Rails', 'Sinatra', 'Hanami', 'Padrino', 'Grape'],
   TypeScript: ['Angular', 'NestJS', 'Express.js with TypeScript', 'Deno'],
   Swift: ['Vapor', 'Perfect', 'Kitura', 'SwiftNIO'],
