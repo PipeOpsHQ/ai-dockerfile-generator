@@ -20,7 +20,7 @@ const CompactToggle = ({ label, onToggle, checked }) => (
 );
 
 CompactToggle.propTypes = {
-  label: PropTypes.string.isRequired,
+  label: PropTypes.string,
   onToggle: PropTypes.func.isRequired,
   checked: PropTypes.bool.isRequired,
 };
