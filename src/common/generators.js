@@ -45,20 +45,22 @@ export const useDockerfileGenerator = () => {
 
     try {
       // Generate Dockerfile
+// Generate Dockerfile
       const dockerfilePrompt = `Create a production-ready Dockerfile for a ${language} application using the ${framework} framework. 
-        Requirements:
-        - Use the official ${language} base image
-        - Follow best practices for security and optimization
-        - Handle dependency installation
-        - Set up the proper working directory
-        - Configure appropriate ports
-        - Set up the proper CMD or ENTRYPOINT
-        - Minimize the image size
-        - Ensure the Dockerfile is suitable for a production environment
+  Requirements:
+  - Use the official ${language} base image
+  - Follow best practices for security and optimization
+  - Handle dependency installation
+  - Set up the proper working directory
+  - Configure appropriate ports
+  - Set up the proper CMD or ENTRYPOINT
+  - Minimize the image size
+  - Ensure the Dockerfile is suitable for a production environment
+  - If additional files or configurations are required (e.g., nginx configuration for static sites, environment variables, etc.), include instructions or placeholders for those files and ensure they are properly referenced in the Dockerfile
 
-        ${context ? `Additional Context: ${contextValue}` : ""}
-        
-        Please provide only the Dockerfile content without any explanations.`;
+  ${context ? `Additional Context: ${contextValue}` : ""}
+  
+  Please provide only the Dockerfile content without any explanations. If additional files are needed, list them in a comment at the end of the Dockerfile with a brief description of their purpose.`;
 
       let dockerfileResult;
       if (aiModel.includes("GPT")) {

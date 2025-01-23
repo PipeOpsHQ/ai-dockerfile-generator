@@ -17,13 +17,14 @@ const limiter = rateLimit({
 
 const allowlist =
   process.env.NODE_ENV === "production"
-    ? process.env.FRONTEND_URL
-    : "http://localhost:5173";
+    ? (process.env.FRONTEND_URL ? "http://localhost:8080" : "http://localhost:5173")
+    : "http://localhost:3000";
 
 const corsOptionsDelegate = function (req, callback) {
   const origin = req.header("Origin");
   const url = req.url;
   let corsOptions;
+  console.log("Origin:", req);
   if (origin === allowlist || url === "/") {
     console.log("CORS allowed for:", origin);
     corsOptions = { origin: true, methods: ["GET", "POST"] }; // Enable CORS
